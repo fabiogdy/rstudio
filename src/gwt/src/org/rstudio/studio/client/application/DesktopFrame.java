@@ -38,6 +38,7 @@ public interface DesktopFrame extends JavaScriptPassthrough
                         String dir,
                         String filter,
                         boolean canChooseDirectories,
+                        boolean focusOpener,
                         CommandWithArg<String> callback);
    
    void getSaveFileName(String caption,
@@ -45,11 +46,13 @@ public interface DesktopFrame extends JavaScriptPassthrough
                         String dir, 
                         String defaultExtension, 
                         boolean forceDefaultExtension,
+                        boolean focusOpener,
                         CommandWithArg<String> callback);
    
    void getExistingDirectory(String caption,
                              String label,
                              String dir,
+                             boolean focusOpener,
                              CommandWithArg<String> callback);
    
    void undo();
@@ -160,6 +163,12 @@ public interface DesktopFrame extends JavaScriptPassthrough
    void zoomActualSize();
    
    void setBackgroundColor(JsArrayInteger rgbColor);
+   
+   void getEnableAccessibility(CommandWithArg<Boolean> callback);
+   void setEnableAccessibility(boolean enable);
+   
+   void getClipboardMonitoring(CommandWithArg<Boolean> callback);
+   void setClipboardMonitoring(boolean monitoring);
    
    void showLicenseDialog();
    void getInitMessages(CommandWithArg<String> callback);
