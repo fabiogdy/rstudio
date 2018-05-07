@@ -36,15 +36,18 @@ namespace program_options {
 struct OptionsDescription
 {
    OptionsDescription(const std::string& programName,
-                      const std::string& defaultConfigFilePath = std::string())
+                      const std::string& defaultConfigFilePath = std::string(),
+                      const std::string& defaultReposFilePath = std::string())
       :  programName(programName),
          defaultConfigFilePath(defaultConfigFilePath),
+         defaultReposFilePath(defaultReposFilePath),
          commandLine("command-line options"),
          configFile("config-file options")
    {
    }
    std::string programName ;
    std::string defaultConfigFilePath;
+   std::string defaultReposFilePath;
    boost::program_options::options_description commandLine;
    boost::program_options::positional_options_description positionalOptions;
    boost::program_options::options_description configFile;

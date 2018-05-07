@@ -310,7 +310,10 @@ ProgramStatus Options::read(int argc,
    FilePath defaultConfigPath("/etc/rstudio/rserver.conf");
    std::string configFile = defaultConfigPath.exists() ?
                                  defaultConfigPath.absolutePath() : "";
-   program_options::OptionsDescription optionsDesc("rserver", configFile);
+   FilePath defaultReposPath("/etc/rstudio/repos.conf");
+   std::string reposFile = defaultReposPath.exists() ?
+                                 defaultReposPath.absolutePath() : "";
+   program_options::OptionsDescription optionsDesc("rserver", configFile, reposFile);
 
    // overlay hook
    addOverlayOptions(&server, &www, &rsession, &auth, &monitor);

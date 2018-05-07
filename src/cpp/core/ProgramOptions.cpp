@@ -133,6 +133,52 @@ bool parseConfigFile(variables_map& vm,
    return true;
 }
 
+bool parseReposFile(variables_map& vm,
+                    const std::string& reposFile)
+{
+   // open the repos file
+   if (!reposFile.empty())
+   {
+      boost::shared_ptr<std::istream> pIfs;
+      if (!FilePath(reposFile).exists())
+      {
+          // repos file is not required to exists
+          return true;
+      }
+
+      Error error = FilePath(reposFile).open_r(&pIfs);
+      if (error)
+      {
+         reportError("Unable to open repos file: " + reposFile,
+                     ERROR_LOCATION);
+
+         return false;
+      }
+
+      try
+      {
+         // parse config file
+         boost::program_options::options_description reposFile;
+
+         variables_map repos;
+         store(parse_config_file(*pIfs, reposFile, true), repos);
+
+         vm.insert(std::make_pair("r-cran-repos2", boost::program_options::variable_value("foo", false)));
+
+         notify(vm) ;
+      }
+      catch(const std::exception& e)
+      {
+         reportError(
+           "Error reading " + reposFile + ": " + std::string(e.what()),
+           ERROR_LOCATION);
+
+         return false;
+      }
+   }
+
+   return true;
+}
 
 ProgramStatus read(const OptionsDescription& optionsDescription,
                    int argc,
@@ -144,6 +190,7 @@ ProgramStatus read(const OptionsDescription& optionsDescription,
 {
    *pHelp = false;
    std::string configFile;
+   std::string reposFile;
    try
    {        
       // general options
@@ -161,7 +208,10 @@ ProgramStatus read(const OptionsDescription& optionsDescription,
       options_description commandLineOptions(optionsDescription.commandLine);
       commandLineOptions.add(general);
       
-      variables_map vm ;
+      variables_map vm;
+
+      reposFile = optionsDescription.defaultReposFilePath;
+      parseReposFile(vm, reposFile);
 
       // the order of parsing is determined based on whether or not the config file has precedence
       // if it does, parse it first, otherwise parse the command line first

@@ -422,8 +422,12 @@ core::ProgramStatus Options::read(int argc, char * const argv[], std::ostream& o
    FilePath defaultConfigPath("/etc/rstudio/rsession.conf");
    std::string configFile = defaultConfigPath.exists() ?
                                  defaultConfigPath.absolutePath() : "";
+   FilePath defaultReposPath("/etc/rstudio/repos.conf");
+   std::string reposFile = defaultReposPath.exists() ?
+                                 defaultReposPath.absolutePath() : "";
    core::program_options::OptionsDescription optionsDesc("rsession",
-                                                         configFile);
+                                                         configFile,
+                                                         reposFile);
 
    optionsDesc.commandLine.add(verify);
    optionsDesc.commandLine.add(runTests);
